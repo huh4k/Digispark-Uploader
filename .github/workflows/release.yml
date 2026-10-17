@@ -1,0 +1,21 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cargo build --release
+      - run: Rename-Item target/release/digispark-uploader.exe Digispark-Uploader.exe
+        shell: pwsh
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: target/release/Digispark-Uploader.exe
+          generate_release_notes: true
